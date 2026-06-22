@@ -1,4 +1,4 @@
-# 🧠 ComfyUI RAG Router (Z-Image RAG Router)
+# 🧠 ComfyUI RAG Router
 
 ![ComfyUI](https://img.shields.io/badge/ComfyUI-Extension-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
