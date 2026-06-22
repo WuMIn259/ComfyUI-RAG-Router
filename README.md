@@ -47,7 +47,7 @@ Navigate to your ComfyUI custom_nodes folder and clone this repo:
 
    ```bash
    cd ComfyUI/custom_nodes
-   git clone https://github.com/YourUsername/ComfyUI-RAG-Router.git
+   git clone https://github.com/WuMIn259/ComfyUI-RAG-Router.git
 
 > [!IMPORTANT]
 > **Manual Offline Model Setup Required:**
