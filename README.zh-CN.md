@@ -43,7 +43,7 @@
    将本仓库克隆到你的 ComfyUI `custom_nodes` 目录下：
    ```bash
    cd ComfyUI/custom_nodes
-   git clone [https://github.com/你的用户名/ComfyUI-RAG-Router.git](https://github.com/你的用户名/ComfyUI-RAG-Router.git)
+   git clone [https://github.com/WuMIn259/ComfyUI-RAG-Router.git]
 
 > [!IMPORTANT]
 > **需要手动离线模型设置：**
