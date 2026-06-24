@@ -35,26 +35,33 @@ class ZImage_RAG_Router:
                 "prompt": ("STRING", {"multiline": True}),
                 "gallery_path": ("STRING", {"default": "./gallery_assets"}), 
                 "blur_radius": ("INT", {"default": 0, "min": 0, "max": 200, "step": 1}),
+                
+                # 【新增功能】一键去色开关！彻底消灭原图色彩污染
+                "grayscale_mode": ("BOOLEAN", {"default": False}),
+                
                 "match_threshold": ("FLOAT", {"default": 0.50, "min": 0.0, "max": 1.0, "step": 0.01}),
-                
-                # 【新增】基础降噪参数。默认 0.67，命中时输出这个值。
                 "base_denoise": ("FLOAT", {"default": 0.67, "min": 0.0, "max": 1.0, "step": 0.01}),
-                
                 "rebuild_index": ("BOOLEAN", {"default": False}),
                 "seed": ("INT", {"default": 0, "min": 0, "max": 0xffffffffffffffff}), 
             }
         }
 
-    # 【新增】输出端口加了一个 FLOAT，用来吐出当前的降噪权重
     RETURN_TYPES = ("IMAGE", "STRING", "FLOAT", "STRING")
     RETURN_NAMES = ("matched_image", "matched_prompt", "denoise", "debug_info")
     FUNCTION = "route_prompt"
     CATEGORY = "Z-Image/Routing"
 
-    def load_image(self, img_path, blur_radius):
+    def load_image(self, img_path, blur_radius, grayscale_mode):
         i = Image.open(img_path).convert("RGB")
+        
+        # 1. 模糊降频
         if blur_radius > 0:
             i = i.filter(ImageFilter.GaussianBlur(radius=blur_radius))
+            
+        # 2. 【核心】去色处理，并转换回 RGB 通道以防 ComfyUI 报错
+        if grayscale_mode:
+            i = i.convert('L').convert('RGB')
+            
         img_tensor = torch.from_numpy(np.array(i).astype(np.float32) / 255.0).unsqueeze(0)
         return img_tensor
 
@@ -71,15 +78,13 @@ class ZImage_RAG_Router:
                         pairs.append((txt_path, img_path))
         return pairs
 
-    # 【注意】函数签名新增了 base_denoise
-    def route_prompt(self, prompt, gallery_path, blur_radius, match_threshold, base_denoise, rebuild_index, seed):
+    def route_prompt(self, prompt, gallery_path, blur_radius, grayscale_mode, match_threshold, base_denoise, rebuild_index, seed):
         random.seed(seed) 
         
         pairs = self.get_gallery_pairs(gallery_path)
         fallback_image = torch.zeros((1, 64, 64, 3), dtype=torch.float32)
         
         if not pairs:
-            # 没找到图库时：兜底图、原短提示词、强制输出 1.0 的 Denoise
             return (fallback_image, prompt, 1.0, "Gallery is empty or path invalid.")
 
         best_score = 0.0
@@ -144,18 +149,17 @@ class ZImage_RAG_Router:
             debug_str_extra = f" (Selected 1 from {len(top_candidates)} top matches)"
 
         matched_prompt = ""
-        output_denoise = 1.0  # 初始化默认值
+        output_denoise = 1.0  
         
         if best_img_path is None or best_score < match_threshold:
-            # 【拦截机制触发】：输出强制 1.0 的 Denoise，彻底放弃兜底黑图的影响
             debug_str = f"Score: {best_score:.2f} | Failed Threshold ({match_threshold:.2f}). No Match."
             matched_image = fallback_image
             matched_prompt = prompt 
             output_denoise = 1.0
         else:
-            # 【匹配成功触发】：输出你设定的 0.67 (或者其他 base_denoise 值)
             debug_str = f"Score: {best_score:.2f}{debug_str_extra} | Match: {os.path.basename(best_img_path)}"
-            matched_image = self.load_image(best_img_path, blur_radius)
+            # 把 grayscale_mode 传给 load_image
+            matched_image = self.load_image(best_img_path, blur_radius, grayscale_mode)
             output_denoise = base_denoise
             
             best_txt_path = os.path.splitext(best_img_path)[0] + ".txt"
