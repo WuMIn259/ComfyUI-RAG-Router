@@ -27,16 +27,16 @@ It also automatically manages the downstream sampler's denoising parameters, ena
   * Avoids inefficient iterative loops on every generation run. Automatically builds a tensor matrix cache file `rag_index.pt` on the first execution.
   * Delivers near-instant retrieval performance under 0.05s even with local libraries containing tens of thousands of asset images.
 
-🔀 Intelligent Generation Engine Routing via Denoise Control
-When matching assets are found: Outputs matched reference images, expanded full descriptive prompts, 
+* **🔀 Intelligent Generation Engine Routing via Denoise Control
+  * When matching assets are found: Outputs matched reference images, expanded full descriptive prompts, 
 and your predefined base_denoise value, perfectly driving image-to-image generation or style transfer pipelines.
-When no matches meet the similarity threshold: Returns a solid black fallback image and forces denoise strength to 1.0 automatically. 
+  * When no matches meet the similarity threshold: Returns a solid black fallback image and forces denoise strength to 1.0 automatically. 
 Downstream samplers instantly switch to pure text-to-image mode without complicated switch bypass node setups.
-🌫️ Native Low-Frequency Composition Guidance
-Built-in Gaussian blur adjustable via the blur_radius parameter. 
-Instantly strip high-frequency fine details from reference images, retaining only composition, color palette and lighting as base drafts to mitigate copyright replication risks.
-🎲 Tied-Score Random Draw Gacha Mechanism
-For multiple assets with nearly identical semantic similarity scores, the node performs seeded random sampling from the high-score pool (within a 0.01 similarity tolerance range),
+* **🌫️ Native Low-Frequency Composition Guidance
+  * Built-in Gaussian blur adjustable via the blur_radius parameter. 
+  * Instantly strip high-frequency fine details from reference images, retaining only composition, color palette and lighting as base drafts to mitigate copyright replication risks.
+* **🎲 Tied-Score Random Draw Gacha Mechanism
+  * For multiple assets with nearly identical semantic similarity scores, the node performs seeded random sampling from the high-score pool (within a 0.01 similarity tolerance range),
  ensuring unique, varied outputs every generation run.
 ---
 
