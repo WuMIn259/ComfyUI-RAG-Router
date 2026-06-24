@@ -50,8 +50,10 @@
 > 为了确保最大程度的隐私保护并实现即时初始化，该扩展不会自动从 Hugging Face 在线下载嵌入模型（embedding model）。在运行工作流之前，您**必须**在本地配置好该模型。
 > 
 > 1. 从官方存储库下载所有文件: [Hugging Face - paraphrase-multilingual-MiniLM-L12-v2](https://hugging face.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main)
-> 2. 创建文件夹名: `models/paraphrase-multilingual-MiniLM-L12-v2` 在此扩展程序的目录内。
-> 3. 将所有下载的配置文件和权重文件 (including the `1_Pooling` folder) 放入其中。
+> 2. 从官方存储库下载所有文件: [Hugging Face - Qwen-Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B)
+> 3. 创建文件夹名: `models/paraphrase-multilingual-MiniLM-L12-v2` 在此扩展程序的目录内。
+> 4. 创建文件夹名: `llm_models/Qwen3-0.6B` 在此扩展程序的目录内。
+> 5. 将所有下载的配置文件和权重文件放入其中。
 ## 📂 资产库目录结构
 
 您的本地图库目录中应包含成对的图像文件与 `.txt` 提示词文件，且两者的文件名必须相同：
