@@ -1,4 +1,4 @@
-# 🧠 ComfyUI RAG Router
+# 🧠 ComfyUI RAG Router (Z-Image RAG Router)
 
 ![ComfyUI](https://img.shields.io/badge/ComfyUI-Extension-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
@@ -27,35 +27,37 @@ It also automatically manages the downstream sampler's denoising parameters, ena
   * Avoids inefficient iterative loops on every generation run. Automatically builds a tensor matrix cache file `rag_index.pt` on the first execution.
   * Delivers near-instant retrieval performance under 0.05s even with local libraries containing tens of thousands of asset images.
 
-* 🔀 ** Intelligent Generation Engine Routing via Denoise Control
-    * **When matching assets are found: Outputs matched reference images, expanded full descriptive prompts, 
+🔀 Intelligent Generation Engine Routing via Denoise Control
+When matching assets are found: Outputs matched reference images, expanded full descriptive prompts, 
 and your predefined base_denoise value, perfectly driving image-to-image generation or style transfer pipelines.
-    * **When no matches meet the similarity threshold: Returns a solid black fallback image and forces denoise strength to 1.0 automatically. 
+When no matches meet the similarity threshold: Returns a solid black fallback image and forces denoise strength to 1.0 automatically. 
 Downstream samplers instantly switch to pure text-to-image mode without complicated switch bypass node setups.
-* **🌫️ Native Low-Frequency Composition Guidance
-    * Built-in Gaussian blur adjustable via the blur_radius parameter. 
+🌫️ Native Low-Frequency Composition Guidance
+Built-in Gaussian blur adjustable via the blur_radius parameter. 
 Instantly strip high-frequency fine details from reference images, retaining only composition, color palette and lighting as base drafts to mitigate copyright replication risks.
-* **🎲 Tied-Score Random Draw Gacha Mechanism
-    * For multiple assets with nearly identical semantic similarity scores, the node performs seeded random sampling from the high-score pool (within a 0.01 similarity tolerance range),
+🎲 Tied-Score Random Draw Gacha Mechanism
+For multiple assets with nearly identical semantic similarity scores, the node performs seeded random sampling from the high-score pool (within a 0.01 similarity tolerance range),
  ensuring unique, varied outputs every generation run.
 ---
 
-## 🛠️ Installation Guide
+🛠️ Installation Guide
 
 Clone the repository
 Navigate to your ComfyUI custom_nodes folder and clone this repo:
 
    ```bash
    cd ComfyUI/custom_nodes
-   git clone https://github.com/WuMIn259/ComfyUI-RAG-Router.git
+   git clone https://github.com/YourUsername/ComfyUI-RAG-Router.git
 
 > [!IMPORTANT]
 > **Manual Offline Model Setup Required:**
 > To ensure maximum privacy and instant initialization, this extension does not auto-download the embedding model from Hugging Face online. You **must** set up the model locally before running your workflows.
 > 
 > 1. Download all files from the official repository: [Hugging Face - paraphrase-multilingual-MiniLM-L12-v2](https://hugging face.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main)
-> 2. Create a folder named `models/paraphrase-multilingual-MiniLM-L12-v2` inside this extension's directory.
-> 3. Place all the downloaded config and weight files (including the `1_Pooling` folder) into it.
+> 2. Download all files from the official repository: [Hugging Face - Qwen-Qwen3-0.6B](https://huggingface.co/Qwen/Qwen3-0.6B)
+> 3. Create a folder named `models/paraphrase-multilingual-MiniLM-L12-v2` inside this extension's directory.
+> 4. Create a folder named `llm_models/Qwen3-0.6B` inside this extension's directory.
+> 5. Place all the downloaded config and weight files into it.
 
 ## 📂 Asset Library Directory Structure
 
